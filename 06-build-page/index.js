@@ -70,21 +70,26 @@ const bundleAssets = async () => {
 };
 async function dellOldItemsFile(dir) {
   try {
-    const folder = await fs.promises.readdir(dir, {
+    const rootFolder = await fs.promises.readdir(projectDist, {
       withFileTypes: true,
     });
-    if (folder.length == 0) {
-      fs.rmdir(dir, (err) => (err ? console.log(err) : false));
-    }
-    folder.forEach(async (e) => {
-      if (e.isFile()) {
-        fs.unlink(path.join(dir, e.name), (err) =>
-          err ? console.log(err) : false,
-        );
-      } else {
-        dellOldItemsFile(path.join(dir, e.name));
+    if (rootFolder.length !== 0) {
+      const folder = await fs.promises.readdir(dir, {
+        withFileTypes: true,
+      });
+      if (folder.length == 0) {
+        fs.rmdir(dir, (err) => (err ? console.log(err) : false));
       }
-    });
+      folder.forEach(async (e) => {
+        if (e.isFile()) {
+          fs.unlink(path.join(dir, e.name), (err) =>
+            err ? console.log(err) : false,
+          );
+        } else {
+          dellOldItemsFile(path.join(dir, e.name));
+        }
+      });
+    }
   } catch (error) {
     console.log(error);
   }

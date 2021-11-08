@@ -8,8 +8,6 @@ const myEmitter = new MyEmitter();
 
 const filePath = path.join(__dirname, "secret-folder");
 
-// const readStream = fs.createReadStream(filePath);
-
 myEmitter.on("event", async () => {
   try {
     const files = await fs.promises.readdir(filePath, { withFileTypes: true });
